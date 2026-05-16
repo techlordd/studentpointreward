@@ -90,13 +90,34 @@ $points=function_exists('srm_current_points')
 
 if($points >= $cost){
 
-WC()->cart->empty_cart();
+$added_key=WC()->cart
+? WC()->cart->add_to_cart($product_id)
+: false;
 
-WC()->cart->add_to_cart($product_id);
+if($added_key){
+
+foreach(WC()->cart->get_cart() as $cart_item_key=>$cart_item){
+
+if($cart_item_key!==$added_key){
+WC()->cart->remove_cart_item($cart_item_key);
+}
+
+}
 
 WC()->session->set('srm_reward_checkout',1);
 
-wp_redirect(wc_get_checkout_url());
+wp_safe_redirect(wc_get_checkout_url());
+
+exit;
+
+}
+
+wc_add_notice(
+'Unable to redeem this product right now. Please try again.',
+'error'
+);
+
+wp_safe_redirect(get_permalink($product_id));
 
 exit;
 
