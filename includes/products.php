@@ -90,7 +90,7 @@ $points=function_exists('srm_current_points')
 
 if ($points >= $cost) {
 
-$redeem_error_message='Unable to redeem this product right now. Please try again.';
+$redeem_error_message = 'Unable to redeem this product right now. Please try again.';
 
 if (!WC()->cart) {
 
@@ -107,7 +107,7 @@ exit;
 
 $existing_item_keys = array_keys(WC()->cart->get_cart());
 
-$cart_item_key=WC()->cart->add_to_cart($product_id);
+$cart_item_key = WC()->cart->add_to_cart($product_id);
 
 if ($cart_item_key) {
 
