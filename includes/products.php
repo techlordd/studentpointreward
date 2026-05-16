@@ -88,15 +88,48 @@ $points=function_exists('srm_current_points')
 ? srm_current_points()
 :0;
 
-if($points >= $cost){
+if ($points >= $cost) {
 
-WC()->cart->empty_cart();
+$redeem_error_message = 'Unable to redeem this product right now. Please try again.';
 
-WC()->cart->add_to_cart($product_id);
+if (!WC()->cart) {
+
+wc_add_notice(
+$redeem_error_message,
+'error'
+);
+
+wp_safe_redirect(get_permalink($product_id));
+
+exit;
+
+}
+
+$existing_item_keys = array_keys(WC()->cart->get_cart());
+
+$cart_item_key = WC()->cart->add_to_cart($product_id);
+
+if ($cart_item_key) {
+
+foreach ($existing_item_keys as $existing_item_key) {
+
+WC()->cart->remove_cart_item($existing_item_key);
+}
 
 WC()->session->set('srm_reward_checkout',1);
 
-wp_redirect(wc_get_checkout_url());
+wp_safe_redirect(wc_get_checkout_url());
+
+exit;
+
+}
+
+wc_add_notice(
+$redeem_error_message,
+'error'
+);
+
+wp_safe_redirect(get_permalink($product_id));
 
 exit;
 
