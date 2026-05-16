@@ -90,16 +90,16 @@ $points=function_exists('srm_current_points')
 
 if($points >= $cost){
 
-$added_key=WC()->cart
+$cart_item_key = WC()->cart
 ? WC()->cart->add_to_cart($product_id)
 : false;
 
-if($added_key){
+if($cart_item_key){
 
-foreach(WC()->cart->get_cart() as $cart_item_key=>$cart_item){
+foreach (WC()->cart->get_cart() as $existing_item_key => $_cart_item) {
 
-if($cart_item_key!==$added_key){
-WC()->cart->remove_cart_item($cart_item_key);
+if ($existing_item_key !== $cart_item_key) {
+WC()->cart->remove_cart_item($existing_item_key);
 }
 
 }
