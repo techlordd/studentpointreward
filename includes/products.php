@@ -90,10 +90,12 @@ $points=function_exists('srm_current_points')
 
 if ($points >= $cost) {
 
+$redeem_error_message='Unable to redeem this product right now. Please try again.';
+
 if (!WC()->cart) {
 
 wc_add_notice(
-'Unable to redeem this product right now. Please try again.',
+$redeem_error_message,
 'error'
 );
 
@@ -103,13 +105,13 @@ exit;
 
 }
 
-$existing_item_keys=array_keys(WC()->cart->get_cart());
+$existing_item_keys = array_keys(WC()->cart->get_cart());
 
 $cart_item_key=WC()->cart->add_to_cart($product_id);
 
 if ($cart_item_key) {
 
-foreach($existing_item_keys as $existing_item_key){
+foreach ($existing_item_keys as $existing_item_key) {
 
 WC()->cart->remove_cart_item($existing_item_key);
 }
@@ -123,7 +125,7 @@ exit;
 }
 
 wc_add_notice(
-'Unable to redeem this product right now. Please try again.',
+$redeem_error_message,
 'error'
 );
 
